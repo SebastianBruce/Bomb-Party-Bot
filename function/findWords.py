@@ -21,11 +21,12 @@ def searchWords(letters):
     matchingWords = sorted(matchingWords, key=len)
 
     # If no matching words found, return None
-    if len(matchingWords) == 0:
-        pass
-    else:
+    if len(matchingWords) != 0:
         # Randomly select 10 matching words
-        newWords = [matchingWords[random.randint(0, len(matchingWords) - 1)] for _ in range(10)]
+        if len(matchingWords) >= 10:
+            newWords = random.sample(matchingWords, 10)
+        else:
+            newWords = matchingWords
         
         # Sort selected words by length
         newWords = sorted(newWords, key=len)
