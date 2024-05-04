@@ -1,6 +1,8 @@
+# Import necessary functions and modules
 from function import screenshot, findWords, copyPasteText
 from playsound import playsound
 import os, keyboard, time, pyautogui
+
 def main():
     # Capture the screen
     screenshotPath = screenshot.captureScreen()
@@ -14,21 +16,33 @@ def main():
     # Extract text from the processed image
     text = screenshot.extractText(processedPath)
     print(text)
+    
     # Search for words containing the extracted text
     if len(text) != 0:
         wordList = findWords.searchWords(text)
+        
         # Copy and paste the selected word
-        copyPasteText.typeWord(wordList, urgent = False)
+        copyPasteText.typeWord(wordList, usedWords, urgent=False)
     else:
+        # If no text extracted, play a buzzer sound
         playsound(r"static\buzzer-or-wrong-answer-20582.mp3")
+        
+        # Save letters and type the word
         text, urgent = copyPasteText.saveLetters()
         wordList = findWords.searchWords(text)
         time.sleep(0.5)
+        
+        # Click at coordinates (803, 1003) assuming it's a specific location
         pyautogui.click(803, 1003)
-        copyPasteText.typeWord(wordList, urgent)
+        
+        # Type the word
+        copyPasteText.typeWord(wordList, usedWords, urgent)
 
 if __name__ == "__main__":
-    # Continuously wait for the F4 key press and execute the main function
+    # Initialize list to store used words
+    usedWords = []
+    
+    # Continuously wait for the Shift key press and execute the main function
     while True:
         print("running")
         keyboard.wait("shift")
