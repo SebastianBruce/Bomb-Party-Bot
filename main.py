@@ -1,7 +1,7 @@
 # Import necessary functions and modules
 from function import screenshot, findWords, copyPasteText
 from playsound import playsound
-import os, keyboard, time, pyautogui
+import os, keyboard, time, pyautogui, re
 
 def main():
     # Capture the screen
@@ -18,7 +18,7 @@ def main():
     print(text)
     
     # Search for words containing the extracted text
-    if len(text) != 0:
+    if len(text) != 0 and not bool(re.search(r'[^a-zA-Z]', text)):
         wordList = findWords.searchWords(text)
         
         # Copy and paste the selected word

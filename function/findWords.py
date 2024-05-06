@@ -9,7 +9,7 @@ def searchWords(letters):
     
     # Open words.txt and extract words into a list
     with open(wordPath, 'r') as file:
-        words = [word.strip() for word in file]
+        words = [word.strip().lower() for word in file]
 
     # Create a regex pattern to match words containing specified letters
     pattern = re.compile('.*' + letters + '.*', re.IGNORECASE)
@@ -24,10 +24,12 @@ def searchWords(letters):
     if len(matchingWords) != 0:
         # Randomly select 10 matching words
         if len(matchingWords) >= 10:
-            newWords = random.sample(matchingWords, 10)
+            newWords = random.sample(matchingWords, 8)
+            newWords.append(matchingWords[0])
+            newWords.append(matchingWords[-1])
         else:
             newWords = matchingWords
-        
+
         # Sort selected words by length
         newWords = sorted(newWords, key=len)
 

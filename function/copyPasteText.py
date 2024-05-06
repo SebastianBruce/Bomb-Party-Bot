@@ -1,4 +1,4 @@
-import pyautogui, random, os, keyboard
+import pyautogui, random, os, keyboard, time
 
 def typeWord(wordList, usedWords, urgent):
     # Initialize a placeholder for the word
@@ -26,29 +26,35 @@ def typeWord(wordList, usedWords, urgent):
                 else:
                     word = wordList[0]
             else:
-                # If urgent mode is disabled, select a random word from the list
-                word = wordList[random.randint(0, len(wordList) - 1)]
+                priorityWords = [w for w in wordList if 'q' in w or 'j' in w or 'w' in w]
+                if priorityWords:
+                    word = max(priorityWords, key=len)
+                else:
+                    word = wordList[-1]
+                if word in usedWords:
+                    # If urgent mode is disabled, select a random word from the list
+                    word = wordList[random.randint(0, len(wordList) - 1)]
 
             # Add the selected word to the list of used words
             usedWords.append(word)
 
         # Type each character of the word with random intervals
         for char in word:
-            interval = 0.02 + random.uniform(-0.02, 0.01)
-            pyautogui.typewrite(char, interval=interval)
+            pyautogui.typewrite(char)
 
             # Introduce occasional errors by typing adjacent keys
-            if random.randint(0, 20) == 0:
+            if random.randint(0, 30) == 0:
                 index = keys.index(char)
                 pyautogui.typewrite(keys[random.randint(index - 2, index + 2)], interval=0.01)
                 pyautogui.press('backspace')
             # Introduce occasional repeated characters
-            elif random.randint(0, 100) == 0:
+            elif random.randint(0, 130) == 0:
                 index = keys.index(char)
-                for i in range(3):
+                for i in range(2):
                     pyautogui.typewrite(keys[random.randint(index - 3, index + 3)], interval=0.01)
-                for i in range(3):
+                for i in range(2):
                     pyautogui.press('backspace')
+            time.sleep(random.uniform(0, 0.01))
 
     # Press enter after typing the word
     pyautogui.press('enter')
